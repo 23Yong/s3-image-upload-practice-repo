@@ -1,10 +1,10 @@
-cloud:
-  aws:
-    s3:
-      bucket: jeongyong-bucket-example
-    region:
-      static: ap-northeast-2
-    stack:
-      auto: false
-    credentials:
-      instanceProfile: true
+spring:
+  servlet:
+    multipart:
+      enabled: true             # MultipartFile 업로드 가능
+      file-size-threshold: 2KB  # 파일이 메모리에 기록되는 임계값
+      max-file-size: 500MB      # 파일의 최대 사이즈
+      max-request-size: 515MB   # 요청의 최대 사이즈
+
+file:
+  upload-dir: ~/uploads
