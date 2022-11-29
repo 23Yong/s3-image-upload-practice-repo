@@ -1,10 +1,10 @@
 package org.example.service;
 
 import org.example.config.FileStorageProperties;
+import org.example.domain.ImageFile;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileNotFoundException;
@@ -31,20 +31,17 @@ public class FileService {
         }
     }
 
-    public String storeFile(MultipartFile file) {
-        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+    public String storeFile(MultipartFile image) {
+        ImageFile imageFile = ImageFile.from(image);
 
         try {
-            if (fileName.contains("..")) {
-                throw new IllegalArgumentException("Filename contains invalid path sequence" + fileName);
-            }
+            String fileName = imageFile.fileName();
+            Path targetLocation = this.fileStorageLocation.resolve(fileName);
 
-            Path targetLocation = fileStorageLocation.resolve(fileName);
-            Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
-
+            Files.copy(imageFile.inputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
             return fileName;
         } catch (IOException e) {
-            throw new IllegalArgumentException("Could not store file " + fileName);
+            throw new IllegalArgumentException();
         }
     }
 

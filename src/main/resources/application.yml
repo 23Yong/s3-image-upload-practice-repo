@@ -6,5 +6,13 @@ spring:
       max-file-size: 500MB      # 파일의 최대 사이즈
       max-request-size: 515MB   # 요청의 최대 사이즈
 
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:s3-test;MODE=MYSQL;
+    username: sa
+    password:
+
+# logging.level.org.apache.coyote.http11: debug
+
 file:
-  upload-dir: ~/uploads
+  upload-dir: src/main/resources/images
