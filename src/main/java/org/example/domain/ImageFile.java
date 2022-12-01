@@ -37,6 +37,10 @@ public class ImageFile {
         return originalFileName;
     }
 
+    public String extension() {
+        return extension;
+    }
+
     public InputStream inputStream() {
         return new ByteArrayInputStream(imageBytes);
     }

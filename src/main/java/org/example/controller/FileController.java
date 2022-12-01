@@ -22,9 +22,11 @@ public class FileController {
 
     private final FileService fileService;
 
-    @PostMapping("/files")
-    public UploadFileResponse upload(@RequestPart MultipartFile file) {
-        String fileName = fileService.storeFile(file);
+    @PostMapping("/upload")
+    public UploadFileResponse upload(
+            @RequestPart(name = "directoryName") String directoryName,
+            @RequestPart(name = "file") MultipartFile file) {
+        String fileName = fileService.storeFile(directoryName, file);
 
         String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/downloadFile/")

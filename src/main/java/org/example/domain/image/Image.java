@@ -25,6 +25,16 @@ public class Image {
     @JoinColumn(name = "directory_id", nullable = false)
     private Directory directory;
 
+    private Image(String imageName, String extension, Directory directory) {
+        this.imageName = imageName;
+        this.extension = extension;
+        this.directory = directory;
+    }
+
+    public static Image of(String imageName, String extension, Directory directory) {
+        return new Image(imageName, extension, directory);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

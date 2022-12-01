@@ -22,6 +22,14 @@ public class Directory {
     @Column(name = "directory_name", nullable = false)
     private String directoryName;
 
+    private Directory(String directoryName) {
+        this.directoryName = directoryName;
+    }
+
+    public static Directory of(String directoryName) {
+        return new Directory(directoryName);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
