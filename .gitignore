@@ -145,8 +145,5 @@ gradle-app.setting
 
 # End of https://www.toptal.com/developers/gitignore/api/gradle,intellij
 
-## YML
-aws.yml
-
 ## IMAGE STORAGE
 src/main/resources/images/**

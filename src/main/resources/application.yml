@@ -1,4 +1,7 @@
 spring:
+  config:
+    import: application-aws.yml
+
   servlet:
     multipart:
       enabled: true             # MultipartFile 업로드 가능
@@ -6,11 +9,25 @@ spring:
       max-file-size: 500MB      # 파일의 최대 사이즈
       max-request-size: 515MB   # 요청의 최대 사이즈
 
+  sql:
+    init:
+      schema-locations:
+        - classpath:schema.sql
+
   datasource:
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:s3-test;MODE=MYSQL;
-    username: sa
-    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/image_collections
+    username: root
+    password: son77
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+    open-in-view: false
 
 # logging.level.org.apache.coyote.http11: debug
 
