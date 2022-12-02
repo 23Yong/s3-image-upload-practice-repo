@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -19,6 +20,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Arrays;
+import java.util.regex.Pattern;
 
 @Service
 public class FileService {
@@ -41,21 +44,45 @@ public class FileService {
     }
 
     @Transactional
-    public String storeFile(String directoryName, MultipartFile image) {
+    public String storeFile(String directoryPath, MultipartFile image) {
         ImageFile imageFile = ImageFile.from(image);
 
         try {
             String fileName = imageFile.fileName();
             Path targetLocation = this.fileStorageLocation.resolve(fileName);
 
-            Directory savedDirectory = directoryRepository.save(Directory.of(directoryName));
-            imageRepository.save(Image.of(fileName, imageFile.extension(), savedDirectory));
+            Directory savedDirectory = saveDirectoryPath(directoryPath);
+            saveImage(imageFile, savedDirectory);
 
             Files.copy(imageFile.inputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
             return fileName;
         } catch (IOException e) {
             throw new IllegalArgumentException();
         }
+    }
+
+    private Directory saveDirectoryPath(String directoryPath) {
+        String pattern = Pattern.quote(System.getProperty("file.separator"));
+        String[] tokens = directoryPath.split(pattern);
+        System.out.println(Arrays.toString(tokens));
+
+        String rootPath = tokens[0];
+        Directory parentDirectory = Directory.of(rootPath);
+        directoryRepository.save(parentDirectory);
+
+        for (int i = 1; i < tokens.length; i++) {
+            Directory childDirectory = Directory.of(tokens[i]);
+            parentDirectory.addChild(childDirectory);
+            directoryRepository.save(childDirectory);
+
+            parentDirectory = childDirectory;
+        }
+
+        return parentDirectory;
+    }
+
+    private void saveImage(ImageFile imageFile, Directory directory) {
+        imageRepository.save(Image.of(imageFile.fileName(), imageFile.extension(), directory));
     }
 
     public Resource loadFileAsResource(String fileName) {

@@ -24,9 +24,9 @@ public class FileController {
 
     @PostMapping("/upload")
     public UploadFileResponse upload(
-            @RequestPart(name = "directoryName") String directoryName,
+            @RequestPart(name = "directoryPath") String directoryPath,
             @RequestPart(name = "file") MultipartFile file) {
-        String fileName = fileService.storeFile(directoryName, file);
+        String fileName = fileService.storeFile(directoryPath, file);
 
         String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/downloadFile/")
