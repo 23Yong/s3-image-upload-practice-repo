@@ -2,7 +2,7 @@ CREATE TABLE directory
 (
     id                  BIGINT          NOT NULL AUTO_INCREMENT,
     directory_name      VARCHAR(255)    NOT NULL,
-    parent_directory_id BIGINT          NOT NULL,
+    parent_directory_id BIGINT,
     PRIMARY KEY (id)
 );
 
