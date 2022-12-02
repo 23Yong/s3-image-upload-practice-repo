@@ -1,3 +1,20 @@
-test:
-  file:
-    upload-dir: src/test/resources/images
+spring:
+  servlet:
+    multipart:
+      enabled: true
+      file-size-threshold: 2KB
+      max-file-size: 50MB
+      max-request-size: 60MB
+
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:s3-test;MODE=MYSQL;
+    username: sa
+    password:
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+
+file:
+  upload-dir: src/test/resources/images
