@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -20,11 +19,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.Arrays;
 import java.util.regex.Pattern;
 
 @Service
 public class FileService {
+
+    private static final String FILE_SEPARATOR = "file.separator";
 
     private final Path fileStorageLocation;
     private final DirectoryRepository directoryRepository;
@@ -62,12 +62,9 @@ public class FileService {
     }
 
     private Directory saveDirectoryPath(String directoryPath) {
-        String pattern = Pattern.quote(System.getProperty("file.separator"));
-        String[] tokens = directoryPath.split(pattern);
-        System.out.println(Arrays.toString(tokens));
+        String[] tokens = directoryPath.split(Pattern.quote(System.getProperty(FILE_SEPARATOR)));
 
-        String rootPath = tokens[0];
-        Directory parentDirectory = Directory.of(rootPath);
+        Directory parentDirectory = Directory.of(tokens[0]);
         directoryRepository.save(parentDirectory);
 
         for (int i = 1; i < tokens.length; i++) {
